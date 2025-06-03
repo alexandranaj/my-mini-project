@@ -1,19 +1,30 @@
-# .github/workflows/ci.yml
 name: CI/CD Pipeline
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Клонирование репозитория
-      uses: actions/checkout@v3
-    - name: Проверка Dockerfile
-      run: |
-        echo "Содержимое Dockerfile:"
-        cat Dockerfile
-    - name: Сборка Docker-образа
-      run: docker build -t my-mini-project 
+      - name: Клонирование репозитория
+        uses: actions/checkout@v3
+
+      - name: Проверка Docker
+        run: docker --version
+
+      - name: Логирование содержимого Dockerfile
+        run: |
+          echo "Содержимое Dockerfile:"
+          cat Dockerfile
+
+      - name: Сборка Docker-образа
+        run: docker build -t my-mini-project .
+
+      - name: Запуск контейнера (опционально)
+        run: |
+          docker run -d -p 8080:80 --name my-container my-mini-project
